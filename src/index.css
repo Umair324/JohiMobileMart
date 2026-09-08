@@ -1,0 +1,76 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+  body {
+    @apply bg-paper text-ink font-body antialiased;
+  }
+  h1, h2, h3, h4 {
+    @apply font-display text-ink;
+  }
+  :focus-visible {
+    outline: 2px solid #1F7A4D;
+    outline-offset: 2px;
+  }
+}
+
+@layer components {
+   .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+  .container-page {
+    @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
+  }
+
+  .btn {
+    @apply inline-flex items-center justify-center gap-2 rounded-tag font-semibold transition-all duration-150 disabled:opacity-50 disabled:cursor-not-allowed px-4 py-2;
+  }
+  .btn-primary {
+    @apply btn bg-bazaar-500 text-white hover:bg-bazaar-600 active:bg-bazaar-700 shadow-sm;
+  }
+  .btn-secondary {
+    @apply btn bg-white text-ink border border-paper-line hover:border-bazaar-400 hover:text-bazaar-600;
+  }
+  .btn-tag {
+    @apply btn bg-tag text-white hover:bg-tag-dark shadow-sm;
+  }
+  .btn-ghost {
+    @apply btn text-ink-light hover:text-bazaar-600 hover:bg-bazaar-50;
+  }
+
+  .price-tag-notch {
+    position: relative;
+  }
+  .price-tag-notch::before {
+    content: "";
+    position: absolute;
+    top: 14px;
+    left: -6px;
+    width: 12px;
+    height: 12px;
+    background: theme(colors.paper.DEFAULT);
+    border-radius: 999px;
+    border: 1px solid theme(colors.paper.line);
+  }
+
+  .input-field {
+    @apply w-full rounded-tag border border-paper-line bg-white px-3.5 py-2.5 text-sm text-ink placeholder:text-ink-faint focus:border-bazaar-400 focus:ring-2 focus:ring-bazaar-100 outline-none transition-colors;
+  }
+
+  .label-field {
+    @apply block text-sm font-semibold text-ink mb-1.5;
+  }
+
+  .card-surface {
+    @apply bg-paper-card rounded-card border border-paper-line shadow-card;
+  }
+}
