@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { useSearchParams } from "react-router-dom";
-import { Send, MessageSquareText, Loader2 } from "lucide-react";
+import { Send, MessageSquareText, Loader2, ArrowLeft } from "lucide-react";
 import ListingImage from "../components/ListingImage";
 import EmptyState from "../components/EmptyState";
 import { messagesApi } from "../api/misc";
@@ -84,7 +84,13 @@ export default function Messages() {
       <h1 className="mb-6 text-2xl font-bold sm:text-3xl">Messages</h1>
 
       <div className="grid gap-0 overflow-hidden rounded-card border border-paper-line md:grid-cols-[300px_1fr]">
-        <div className="border-b border-paper-line bg-white md:border-b-0 md:border-r">
+        {/* On mobile: hide the conversation list once a chat is open.
+            On desktop (md+): always show it side-by-side. */}
+        <div
+          className={`border-b border-paper-line bg-white md:border-b-0 md:border-r ${
+            activeId ? "hidden md:block" : "block"
+          }`}
+        >
           <div className="max-h-[70vh] overflow-y-auto">
             {loadingList ? (
               <div className="flex items-center justify-center py-10 text-ink-faint">
@@ -128,10 +134,14 @@ export default function Messages() {
           </div>
         </div>
 
-        {/* Bounded height (h-[70vh], not min-h) so the flex-1 message
-            list below actually has a fixed box to scroll within, instead
-            of growing forever and pushing the whole page to scroll. */}
-        <div className="flex h-[70vh] flex-col bg-paper">
+        {/* On mobile: hide this panel entirely until a conversation is
+            selected, so the page never shows both the (potentially long)
+            list and the thread stacked on top of each other. */}
+        <div
+          className={`h-[70vh] flex-col bg-paper ${
+            activeId ? "flex" : "hidden md:flex"
+          }`}
+        >
           {!activeId ? (
             <div className="flex flex-1 items-center justify-center p-8">
               <EmptyState
@@ -142,13 +152,23 @@ export default function Messages() {
             </div>
           ) : (
             <>
-              <div className="border-b border-paper-line bg-white px-4 py-3">
-                <p className="font-bold text-ink">{activeConvo?.otherUser?.name}</p>
-                {activeConvo?.listing && (
-                  <p className="text-xs text-ink-faint">
-                    Re: {activeConvo.listing.brand} {activeConvo.listing.model}
-                  </p>
-                )}
+              <div className="flex items-center gap-2 border-b border-paper-line bg-white px-4 py-3">
+                <button
+                  type="button"
+                  onClick={() => setSearchParams({})}
+                  aria-label="Back to conversations"
+                  className="-ml-1 flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-ink-faint hover:bg-paper md:hidden"
+                >
+                  <ArrowLeft size={18} />
+                </button>
+                <div className="min-w-0">
+                  <p className="truncate font-bold text-ink">{activeConvo?.otherUser?.name}</p>
+                  {activeConvo?.listing && (
+                    <p className="truncate text-xs text-ink-faint">
+                      Re: {activeConvo.listing.brand} {activeConvo.listing.model}
+                    </p>
+                  )}
+                </div>
               </div>
 
               <div
