@@ -51,7 +51,7 @@ export default function BuyMobile() {
         maxPrice: filters.maxPrice,
         sort,
         page,
-        limit: 8,
+        limit: 12,
       })
       .then((data) => {
         if (!cancelled) setResult(data);
