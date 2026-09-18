@@ -1,15 +1,15 @@
 export const categories = [
-  { id: "iphone", name: "iPhone", emoji: "📱" },
-  { id: "samsung", name: "Samsung", emoji: "📱" },
-  { id: "xiaomi", name: "Xiaomi", emoji: "📱" },
-  { id: "vivo", name: "Vivo", emoji: "📱" },
-  { id: "oppo", name: "Oppo", emoji: "📱" },
-  { id: "realme", name: "Realme", emoji: "📱" },
-  { id: "infinix", name: "Infinix", emoji: "📱" },
-  { id: "tecno", name: "Tecno", emoji: "📱" },
-  { id: "oneplus", name: "OnePlus", emoji: "📱" },
-  { id: "pixel", name: "Google Pixel", emoji: "📱" },
-  { id: "other", name: "Other", emoji: "📱" },
+  { id: "iphone", name: "iPhone", brand: "Apple", emoji: "📱" },
+  { id: "samsung", name: "Samsung", brand: "Samsung", emoji: "📱" },
+  { id: "xiaomi", name: "Xiaomi", brand: "Xiaomi", emoji: "📱" },
+  { id: "vivo", name: "Vivo", brand: "Vivo", emoji: "📱" },
+  { id: "oppo", name: "Oppo", brand: "Oppo", emoji: "📱" },
+  { id: "realme", name: "Realme", brand: "Realme", emoji: "📱" },
+  { id: "infinix", name: "Infinix", brand: "Infinix", emoji: "📱" },
+  { id: "tecno", name: "Tecno", brand: "Tecno", emoji: "📱" },
+  { id: "oneplus", name: "OnePlus", brand: "OnePlus", emoji: "📱" },
+  { id: "pixel", name: "Google Pixel", brand: "Google", emoji: "📱" },
+  { id: "other", name: "Other", brand: "Other", emoji: "📱" },
 ];
 
 export const brands = [
