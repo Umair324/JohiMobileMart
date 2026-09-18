@@ -19,12 +19,7 @@ export default function SellerCard({ seller, mobile }) {
   const listingId = mobile._id || mobile.id;
   const waMessage = `Assalam o Alaikum, I saw your ${mobile.model} ${mobile.variant} listing on Johi Mobile Mart. Is it still available?`;
 
-  const revealContact = async () => {
-    if (!user) {
-      showToast("Please login to view seller contact details.", "info");
-      navigate("/login");
-      return;
-    }
+   const revealContact = async () => {
     setLoadingContact(true);
     try {
       const data = await listingsApi.contact(listingId);

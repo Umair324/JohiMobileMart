@@ -102,7 +102,7 @@ router.get("/:id", optionalAuth, async (req, res) => {
   }
 });
 
-router.get("/:id/contact", protect, async (req, res) => {
+router.get("/:id/contact", async (req, res) => {
   const listing = await Listing.findById(req.params.id).populate("seller", "name phone whatsapp");
   if (!listing) return res.status(404).json({ message: "Listing not found" });
   res.json({
