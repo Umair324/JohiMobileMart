@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Phone, MessageCircle, Mail, MapPin, ShieldCheck, Star, Loader2 } from "lucide-react";
 import { whatsappLink, telLink } from "../utils/format";
@@ -10,7 +10,7 @@ import { resolveImageUrl } from "../api/client";
 
 export default function SellerCard({ seller, mobile }) {
   const [contact, setContact] = useState(null);
-  const [loadingContact, setLoadingContact] = useState(false);
+  const [loadingContact, setLoadingContact] = useState(true);
   const [sendingMessage, setSendingMessage] = useState(false);
   const { user } = useAuth();
   const { showToast } = useToast();
@@ -19,17 +19,27 @@ export default function SellerCard({ seller, mobile }) {
   const listingId = mobile._id || mobile.id;
   const waMessage = `Assalam o Alaikum, I saw your ${mobile.model} ${mobile.variant} listing on Johi Mobile Mart. Is it still available?`;
 
-   const revealContact = async () => {
+  // Load contact details automatically as soon as the card mounts,
+  // instead of waiting for a button click.
+  useEffect(() => {
+    let cancelled = false;
     setLoadingContact(true);
-    try {
-      const data = await listingsApi.contact(listingId);
-      setContact(data);
-    } catch (err) {
-      showToast(err.message, "warning");
-    } finally {
-      setLoadingContact(false);
-    }
-  };
+    listingsApi
+      .contact(listingId)
+      .then((data) => {
+        if (!cancelled) setContact(data);
+      })
+      .catch((err) => {
+        if (!cancelled) showToast(err.message, "warning");
+      })
+      .finally(() => {
+        if (!cancelled) setLoadingContact(false);
+      });
+    return () => {
+      cancelled = true;
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [listingId]);
 
   const messageSeller = async () => {
     if (!user) {
@@ -91,12 +101,11 @@ export default function SellerCard({ seller, mobile }) {
       </div>
 
       <div className="mt-4 space-y-2.5">
-        {!contact ? (
-          <button onClick={revealContact} disabled={loadingContact} className="btn-secondary w-full">
-            {loadingContact ? <Loader2 size={16} className="animate-spin" /> : <Phone size={16} />}
-            Show Contact Options
-          </button>
-        ) : (
+        {loadingContact ? (
+          <div className="flex items-center justify-center gap-2 py-2 text-sm text-ink-faint">
+            <Loader2 size={16} className="animate-spin" /> Loading contact...
+          </div>
+        ) : contact ? (
           <>
             <a href={telLink(contact.phone)} className="btn-primary w-full">
               <Phone size={16} /> Call Seller
@@ -105,16 +114,14 @@ export default function SellerCard({ seller, mobile }) {
               <MessageCircle size={16} /> WhatsApp Seller
             </a>
           </>
+        ) : (
+          <p className="py-2 text-center text-sm text-ink-faint">Contact info unavailable.</p>
         )}
         <button onClick={messageSeller} disabled={sendingMessage} className="btn-ghost w-full border border-paper-line">
           {sendingMessage ? <Loader2 size={16} className="animate-spin" /> : <Mail size={16} />}
           Message Seller
         </button>
       </div>
-
-      <p className="mt-3 text-center text-[11px] text-ink-faint">
-        Phone number is hidden until you request it, to protect seller privacy.
-      </p>
     </div>
   );
 }
